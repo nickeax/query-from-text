@@ -1,0 +1,43 @@
+let tmp = "";
+      let createDisplayAllPanel = document.createElement("div");
+      createDisplayAllPanel.innerHTML += mainStyle;
+      document.body.appendChild(createDisplayAllPanel);
+      
+      const displayAllForm = document.createElement('form');
+      const displayAllFormDataSetNameInput = document.createElement('input');
+      
+      // Create the form and append the input element
+      displayAllFormDataSetNameInput.setAttribute('id', 'dataSetName');
+      displayAllFormDataSetNameInput.setAttribute('placeholder', 'dataset name');
+      displayAllForm.setAttribute('action', '#');
+      displayAllForm.appendChild(displayAllFormDataSetNameInput);
+
+      // Append the form to createDisplayAllPanel
+      createDisplayAllPanel.appendChild(displayAllForm);
+
+      // Create table
+      const displayAllTable = document.createElement('table');
+      const displayAllTableRow = document.createElement('tr');
+      const displayAllTH_ID = document.createElement('th');
+      const displayAllTH_Title = document.createElement('th');
+      const displayAllTH_Operations = document.createElement('th');
+      const displayAllTH_Blank1 = document.createElement('th');
+      const displayAllTH_Blank2 = document.createElement('th');
+      const displayAllTH_Blank3 = document.createElement('th');
+      
+      // Set inner values
+      displayAllTH_ID.innerText = "id";
+      displayAllTH_Title.innerText= 'title';
+      displayAllTH_Operations.innerText = 'operations';
+      displayAllTH_Operations.setAttribute('colspan', '3');
+      
+      // Set sub relationships
+      displayAllTableRow.appendChild(displayAllTH_ID);
+      displayAllTableRow.appendChild(displayAllTH_Title);
+      displayAllTableRow.appendChild(displayAllTH_Operations);
+      displayAllTableRow.appendChild(displayAllTH_Blank1);
+      displayAllTableRow.appendChild(displayAllTH_Blank2);
+      displayAllTableRow.appendChild(displayAllTH_Blank3);
+      displayAllTable.appendChild(displayAllTableRow);
+
+      createDisplayAllPanel.appendChild(displayAllTable);

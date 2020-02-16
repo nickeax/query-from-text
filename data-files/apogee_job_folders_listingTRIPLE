@@ -1,0 +1,13 @@
+Press F12.
+Cick on the 'console' tab.
+Type the following into the console.
+
+const handle = document.getElementsByClassName('_19ea');
+handle[0].style.display = "block";
+
+
+handle[0].lastElementChild.style = "background-color:red; color: #eee; border-radius:50%; box-shadow: 0, 0, 7px rgba(0, 0, 0, 0.5); padding: 3rem; font-size: 40px;"
+
+const handle = document.getElementsByClassName('_19ea');
+handle[0].lastElementChild.style = "background-color:red; color: #eee; border-radius:50%; box-shadow: 0, 0, 7px rgba(0, 0, 0, 0.5); padding: 3rem; font-size: 40px;"
+handle[0].innerHTML += "<h2 style='background-color: black; color: white; padding: 1rem'>What are you doing... Dave?</h2>";

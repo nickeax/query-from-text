@@ -1,7 +1,7 @@
-let msg = "";
-let file_info_text = "";
-let sqlCommand = "INSERT";
+import { clear, displayMessages, fieldsValuesMatch } from "./utils/manips.js";
 
+let sqlCommand = "INSERT";
+let begin, finished, elapsed = 0;
 const textTypes = /text.*/;
 
 // DECLARATIONS 
@@ -9,12 +9,14 @@ const textTypes = /text.*/;
 const file_info = document.querySelector('#file_info');
 const query_info = document.querySelector('#query_info');
 const messages = document.querySelector('#messages');
+const output = document.querySelector('#output');
 
 // UI CONTROLS
 const processBtn = document.querySelector('#processBtn');
 const clearBtn = document.querySelector('#clearBtn');
 const fieldsInput = document.querySelector('#fieldsInput');
 const valuesInput = document.querySelector('#valuesInput');
+const tableNameInput = document.querySelector('#tableNameInput');
 
 // INITIALISATIONS
 fieldsInput.value = "";
@@ -23,7 +25,9 @@ valuesInput.value = "";
 // ASSIGNMENTS
 processBtn.style.opacity = '0';
 processBtn.addEventListener("click", e => {
+  begin = Date.now();
   processInput();
+  finished = Date.now();
 });
 
 fieldsInput.addEventListener('keyup', fieldsValuesMatch);
@@ -36,64 +40,62 @@ fInput.addEventListener('change', processInput);
 
 function processInput() {
   if (fInput.files.length === 0) {
-    msg = "No file selected";
-    displayMessages(messages);
+    displayMessages(messages, "No file selected");
     return;
   }
-
   let file = fInput.files[0];
   if (file.type.match(textTypes)) {
     let fr = new FileReader();
     fr.readAsText(file);
-    fr.onload = function() {
-      if(fr.result !== null) {
-        ta1.innerText = fr.result;
+    fr.onload = function () {
+      ta1.value = "PROCESSING...";
+      if (fr.result !== null) {
+        output.innerText = fr.result;
       } else {
-        msg = "No data received";
-        displayMessages(messages);
+        displayMessages(messages, "No data received");
       }
+      let disp = process(fr.result);
+      output.innerText = "";
+      ta1.value = formatOutput(disp);
+
+      displayMessages(messages, "Conversion to SQL complete.");
     };
   }
 }
 
+function formatOutput(arrArr) {
+  let tmp = "";
+  let comm = "";
+  arrArr.forEach(x => {
+    tmp += "(";
+    x.forEach((y, i) => {
+      comm = x.length % i === 0 || i === 0 ? ", " : "";
+      tmp += `${y}${comm}`;
+      file_info.innerText = `
+        [COLS: ${x.length}][ROWS: ${arrArr.length}][LOAD TIME: ${finished - begin}ms]
+        `;
+    })
+    tmp += "),\n";
+  });
+  let res = tmp.trim().slice(0, -1);
+  return res;
+}
+// INSERT INTO tableName (field1, field2, field3) VALUES (val1, val2, val3)
 function process(txt) {
-  let arr = txt.split('\n');
-  let width = valuesInput.value.split(' ').length;
-  arr = arr.map((x, index) => {
-    (index % width === 0) ? tmp += `<br>` : ``;
+  let tmp = `INSERT INTO ${tableNameInput.value || '|||BLANK|||'}`;
+  let dataArr = txt;
+  let compiledArr = buildObject(dataArr.split('\n'), valuesInput.value.split('|'));
 
-    tmp += `${sqlCommand} ()`
-  })
-
-  msg="Your data has been converted to SQL format and is ready to copy and paste into your database management software as a query.";
-  displayMessages(messages);
+  return compiledArr;
 }
 
-function fieldsValuesMatch() {
-  let fcount = fieldsInput.value.split(' ').length;
-  let vcount = valuesInput.value.split(' ').length;
-  
-  query_info.innerText = `FIELDS COUNT: ${fcount} VALUES COUNT: ${vcount} (these must match)`;
-  if(fcount !== vcount) {
-    processBtn.style.opacity = '0';
-    msg = "Number of field entries doesn't match number of values entries." + valuesInput;
-    displayMessages(messages);
-  } else {
-    processBtn.style.opacity = '1';
-    msg = "Number of field entries matches number of values entries";
-    displayMessages(messages);
+function buildObject(arr1, arr2) {
+  let resArr = [];
+  for (let i = 0; i < arr1.length; i++) {
+    let tmpArr = [arr2[0].trim(), arr1[i].trim(), arr2[2].trim(), arr2[3].trim() || 'BLANK'];
+    resArr.push(tmpArr);
   }
+  return resArr;
 }
 
-function clear() {
-  ta1.value = "";
-  msg = "";
-  file_info_text = "";
-  fieldsInput.value = "";
-  valuesInput.value = "";
-}
-
-function displayMessages(elem) {
-  elem.innerText = msg;
-  msg = "";
-}
+export let file_info_text = "";
