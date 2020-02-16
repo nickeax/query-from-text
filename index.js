@@ -48,7 +48,7 @@ function processInput() {
   begin = Date.now();
   console.log(`START TIME: ${begin}`);
   if (fInput.files.length === 0) {
-    displayMessages(messages, "No file selected", ERROR);
+    displayMessages(messages, "No file selected", ERRO);
     return;
   }
   let file = fInput.files[0];
