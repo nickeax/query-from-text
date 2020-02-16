@@ -12,7 +12,7 @@
 <body>
   <div class="container">
     <div class="ui ui-message" id="messages"></div>
-    <div id="file_info" class="ui ui-message"></div>
+    <!-- <div id="file_info" class="ui ui-message"></div> -->
     <div id="query_info" class="ui ui-message"></div>
     <input type='text' id="fieldsInput" class="ui ui-input__text" placeholder="fields"><label for="fieldsInput"> field names</label>
     <input type='text'  id="valuesInput" class="ui ui-input__text" placeholder="default values"><label for="valuesInput"> valuesInput</label>
@@ -23,10 +23,11 @@
         <input type="file" id="fInput">
         <span class="" id="processBtn"></span>
         <span class="btn btn-action" id="clearBtn" type="button">CLEAR</span>
-        <textarea name="results" id="ta1" cols="30" rows="10"></textarea>
+        <textarea name="results" id="ta1" cols="30" rows="12"></textarea>
       </form>
     </div>
-    <div id="output">... nothing processed</div>
+    <div id="file_info" class="ui ui-message"></div>
+    <div id="output"></div>
   </div>
   <script src="index.js" defer type="module"></script>
 </body>
